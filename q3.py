@@ -1,7 +1,7 @@
 from nltk import word_tokenize
 from sklearn.feature_extraction.text import CountVectorizer
 from collections import defaultdict
-import re, numpy as np
+import re, numpy as np, os
 
 
 def prepare_data(text):
@@ -59,23 +59,32 @@ def export_vocab(fname, vocab):
         out += vocab[i][0]  # Word type
         out += "\t"+str(i)  # numeric id
         out += "\t"+str(vocab[i][1])+"\n"   # frequency
-    with open(fname, "w") as f:
+    with open(fname, "w", encoding="utf8") as f:
         f.write(out)
         f.close()
 
 
-def export_data(fname, x, y):
-    pass
+def export_data(fname, x_tokens, vectorizer, y):
+    out = ""
+    for i in range(0, len(y)):
+        for token in x_tokens[i]:
+            indices = np.nonzero(vectorizer.transform(np.array([token])))
+            # print(indices[1][0] if indices[0].shape[0] != 0 else "")
+            out += (str(indices[1][0]) if indices[0].shape[0] != 0 else "")
+            out += " "
+        out = out[:-1] + "\t" + str(y[i]) + "\n"
+    with open(fname, mode="w", encoding="utf8") as f:
+        f.write(out)
+        f.close()
 
 
 # YELP
-yelp_train_raw, yelp_train_tokens, yelp_train_y = datafromfile("yelp-train.txt")
-yelp_vocab = generate_vocabulary(yelp_train_tokens) # For exported DB
-export_vocab("yelp-vocab.txt", yelp_vocab)
+yelp_train_raw, yelp_train_tokens, yelp_train_y = datafromfile(os.path.join("data","yelp-train.txt"))
+# yelp_vocab = generate_vocabulary(yelp_train_tokens) # For exported DB
+# export_vocab(os.path.join("out","yelp-vocab.txt"), yelp_vocab)
 
 yelp_vectorizer = CountVectorizer(max_features=10000)
 yelp_train_x = yelp_vectorizer.fit_transform(np.array(yelp_train_raw))
-print(yelp_train_x[:2])
-
-
-# IMDB
+# export_data(os.path.join("out","yelp-train.txt"), yelp_train_tokens, yelp_vectorizer, yelp_train_y)
+# export_data(os.path.join("out","data-export-test.txt"), [["this", "is", "a", "test"]], yelp_vectorizer, [3])
+# print(np.nonzero(yelp_vectorizer.transform(["test"]))[1][0])
