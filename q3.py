@@ -102,14 +102,6 @@ yelp_train_y = np.array(yelp_train_y)
 yelp_valid_y = np.array(yelp_valid_y)
 yelp_test_y = np.array(yelp_test_y)
 
-
-	# Export data as per instructions
-print(export_vocabulary(os.path.join("out","yelp-vocab.txt"),
-						[prepare_text(yelp_train_raw, False)], yelp_vectorizer))
-export_data(os.path.join("out","yelp-train.txt"), yelp_train_tokenlines, yelp_vectorizer, yelp_train_y)
-export_data(os.path.join("out","yelp-valid.txt"), yelp_valid_tokenlines, yelp_vectorizer, yelp_valid_y)
-export_data(os.path.join("out","yelp-test.txt"), yelp_test_tokenlines, yelp_vectorizer, yelp_test_y)
-
 # IMDB
 	# Prepare data
 IMDB_train_raw, IMDB_train_rawlines, IMDB_train_tokenlines, IMDB_train_y = \
@@ -126,6 +118,16 @@ IMDB_test_x = IMDB_vectorizer.transform(np.array(IMDB_test_rawlines))
 IMDB_train_y = np.array(IMDB_train_y)
 IMDB_valid_y = np.array(IMDB_valid_y)
 IMDB_test_y = np.array(IMDB_test_y)
+
+
+
+quit() # Don't export again
+	# Export data as per instructions
+print(export_vocabulary(os.path.join("out","yelp-vocab.txt"),
+						[prepare_text(yelp_train_raw, False)], yelp_vectorizer))
+export_data(os.path.join("out","yelp-train.txt"), yelp_train_tokenlines, yelp_vectorizer, yelp_train_y)
+export_data(os.path.join("out","yelp-valid.txt"), yelp_valid_tokenlines, yelp_vectorizer, yelp_valid_y)
+export_data(os.path.join("out","yelp-test.txt"), yelp_test_tokenlines, yelp_vectorizer, yelp_test_y)
 
 
 	# Export data as per instructions
